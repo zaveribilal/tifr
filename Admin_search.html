@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Roboto" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="./css/materialize.min.css" media="screen,projection" />
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<style>
+		.form-adjustment{
+      		margin-top: 150px;
+      		/* vertical-align: 80vh; */
+    	}
+    	body {
+   			/* background-image: url("Website.jpg"); */
+   			/* background-repeat: no-repeat; */
+      		background-color:#e3f2fd;
+      	}	 
+  </style>
+</head>
+
+<body>
+	<div class="row ">
+		<div class="col l12 m12 s12 ">
+			<div class="input-field col offset-s4 form-adjustment">
+				<label for="Name">Search</label>
+				<input placeholder="Enter the Email,ccode,Phone-number" id="data" type="email">
+				<button id="email_search" class="waves-effect waves-light btn">Submit</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col l4 offset-l4 m12 s12">
+			<h6>
+				Details of employee
+			</h6>
+		</div>
+	</div>
+
+	<div id="result" class="container">
+		<div class="row">
+			<div class="col l6">
+				<p>Rest name: <span id="restname"></span></p>
+				<p>Surname: <span id="1"></span></p>
+				<p>dept: <span id="2"></span></p>
+				<p>room_no: <span id="3"></span></p>
+				<p>office: <span id="4"></span></p>
+				<p>residence: <span id="5"></span></p>
+			</div>
+			<div class="col l6">
+				<p>email: <span id="surname"></span></p>
+				<p>off1: <span id="6"></span></p>
+				<p>mobile: <span id="7"></span></p>
+				<p>ccode: <span id="8"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>off_res_ext: <span id="0"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+				<p>fax: <span id="9"></span></p>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- </form> -->
+
+	<!--JavaScript at end of body for optimized loading-->
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="./js/materialize.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var search_btn = document.getElementById('email_search');
+			var email = document.getElementById('data')
+			search_btn.addEventListener('click', function () {
+				var formData = new FormData();
+				formData.append("data", email.value);
+				var ajax = new XMLHttpRequest();
+				ajax.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						console.log(this.responseText);
+						var response = JSON.parse(this.responseText);
+						console.log(response[0]);
+						for (var i in response[0]) {
+							console.log(i);
+							document.getElementById(i).innerHTML = response[0][i];
+						}
+					}
+				}
+				ajax.open("POST", "include/search.php", true);
+				ajax.send(formData);
+			})
+		})
+	</script>
+</body>
+
+</html>
