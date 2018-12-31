@@ -10,28 +10,55 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	<style>
-		.form-adjustment{
-      		margin-top: 150px;
-      		/* vertical-align: 80vh; */
-    	}
-    	body {
-   			/* background-image: url("Website.jpg"); */
-   			/* background-repeat: no-repeat; */
-      		background-color:#e3f2fd;
-      	}	 
-  </style>
+		.section{
+			width: 100%;
+			height: 100vh;
+		}
+
+		.logo{
+            width: 100px;
+            margin: 8px 0px;
+        }
+
+        ::-webkit-file-upload-button {
+            text-decoration: none;
+            color: #fff;
+            background-color: #26a69a;
+            text-align: center;
+            letter-spacing: .5px;
+            -webkit-transition: background-color .2s ease-out;
+            transition: background-color .2s ease-out;
+            cursor: pointer;
+            border: none;
+            border-radius: 2px;
+            display: inline-block;
+            height: 36px;
+            line-height: 36px;
+            padding: 0 16px;
+            text-transform: uppercase;
+            vertical-align: middle;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 
-<body class="container">
-	<div class="row">
+<body>
+    <nav class="transparent z-depth-0">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo"><img class="logo" src="images/logo.png" /></a>
+        </div>
+    </nav>
+	<div class="section container row valign-wrapper">
 		<div class="col l6 m12 s12 offset-l3">
-            <form action="include/login.php" method="POST">
+            <!-- <form action="include/login.php" method="POST"> -->
                 <label for="username">Username</label>
                 <input placeholder="Username" id="username" name="username" type="text">
                 <label for="password">Password</label>
                 <input placeholder="Password" id="password" name="password" type="password">
-                <input type="submit" class="waves-effect waves-light btn white-text" value="LOGIN">
-            </form>
+                <button id="login_btn" type="submit" class="btn blue waves-effect waves-light white-text">LOGIN</button>
+            <!-- </form> -->
 		</div>
 	</div>
 
@@ -40,23 +67,26 @@
 	<script type="text/javascript" src="./js/materialize.min.js"></script>
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
-			var search_btn = document.getElementById('email_search');
-			var email = document.getElementById('data')
-			search_btn.addEventListener('click', function () {
+			var login = document.getElementById('login_btn');
+			login.addEventListener('click', function () {
 				var formData = new FormData();
-				formData.append("data", email.value);
+				formData.append("username", document.getElementById('username').value);
+				formData.append("password", document.getElementById('password').value);
 				var ajax = new XMLHttpRequest();
 				ajax.onreadystatechange = function () {
 					if (this.readyState == 4 && this.status == 200) {
+						console.log(this.responseText);
 						var response = JSON.parse(this.responseText);
-						console.log(response[0]);
-						for (var i in response[0]) {
-							console.log(i);
-							document.getElementById(i).innerHTML = response[0][i];
+						if(response.status === '200'){
+							M.toast({html: response.message});
+							window.location.href = 'search.html';
+						}else{
+							M.toast({html: response.message});
 						}
+						
 					}
 				}
-				ajax.open("POST", "include/search.php", true);
+				ajax.open("POST", "include/login.php", true);
 				ajax.send(formData);
 			})
 		})

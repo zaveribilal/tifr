@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Roboto" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="./css/materialize.min.css" media="screen,projection" />
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<style>
+		#prof_pic{
+			width: 125px;
+			height: 150px;
+			border: 1px solid #424242;
+		}
+
+		.brand-logo{
+			font-weight: bold !important;
+		}
+
+		.logo{
+            width: 100px;
+            margin: 8px 16px;
+        }
+
+        ::-webkit-file-upload-button {
+            text-decoration: none;
+            color: #fff;
+            background-color: #26a69a;
+            text-align: center;
+            letter-spacing: .5px;
+            -webkit-transition: background-color .2s ease-out;
+            transition: background-color .2s ease-out;
+            cursor: pointer;
+            border: none;
+            border-radius: 2px;
+            display: inline-block;
+            height: 36px;
+            line-height: 36px;
+            padding: 0 16px;
+            text-transform: uppercase;
+            vertical-align: middle;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+	<nav class="transparent z-depth-0">
+		<div class="nav-wrapper container">
+			<a href="#" class="brand-logo"><img class="logo" src="images/logo.png" /></a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a class="grey-text text-darken-4" href="new.html">New Employee</a></li>
+				<li><a class="grey-text text-darken-4" href="phone.html">Assign Phone</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="section container row valign-wrapper center">
+		<div class="col l10 offset-l1 m12 s12">
+			<div class="input-field col l12">
+				<label for="s_name">Search Name</label>
+				<input placeholder="Enter the Name" id="s_name" type="text">
+			</div>
+			<div class="input-field col l12">
+				<label for="s_ccode">Search CCODE</label>
+				<input placeholder="Enter the CCODE" id="s_ccode" type="text">
+			</div>
+			<div class="input-field col l12">
+				<label for="s_phone">Search Phone</label>
+				<input placeholder="Enter the Phone" id="s_phone" type="text">
+			</div>
+		</div>
+	</div>
+	<div id="result" class="container">
+		<div class="row">
+			<div class="col l10 offset-l1 m12 s12">
+				<div class="input-field">
+					<label for="name">Name</label>
+					<input id="name" type="text" name="name" id="name" placeholder="Name" disabled>
+				</div>
+				<div class="img-holder">
+					<label>Photo</label>
+					<div class="row">
+						<img id="prof_pic" src="" />
+					</div>
+				</div>
+				<div class="input-field">
+					<label for="ccode">CCODE</label>
+					<input id="ccode" type="text" name="ccode" placeholder="CCODE" disabled>
+				</div>
+				<div class="input-field">
+					<label for="uid">UID</label>
+					<input id="uid" type="text" name="uid" placeholder="UID" disabled>
+				</div>
+				<div class="input-field">
+					<label for="designation">Designation</label>
+					<input id="designation" type="text" name="designation" placeholder="Designation" disabled>
+				</div>
+				<div class="input-field">
+					<label for="dept">Department</label>
+					<input id="dept" type="text" name="dept" placeholder="Department" disabled>
+				</div>
+				<div class="input-field">
+					<label for="email">Email</label>
+					<input id="email" type="text" name="email" placeholder="Email" disabled>
+				</div>
+				<div class="input-field">
+					<label for="off_mob">Official Mobile</label>
+					<input id="off_mob" type="text" name="off_mob" placeholder="Official Mobile" disabled>
+				</div>
+				<div class="input-field">
+					<label for="role">Role</label>
+					<input id="role" type="text" name="role" placeholder="Role">
+				</div>
+				<button id="submit" class="btn light-blue">SUBMIT</button>
+			</div>
+		</div>
+
+		<!--JavaScript at end of body for optimized loading-->
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="./js/materialize.min.js"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				if (getCookie('PHPSESSID') === "") {
+					window.location.href = "unauth.html";
+				}
+
+				var name = document.getElementById('s_name');
+				var ccode = document.getElementById('s_ccode');
+				var phone = document.getElementById('s_phone');
+
+				name.addEventListener('keyup', function () {
+					var formData = new FormData();
+					formData.append("data", name.value);
+					var ajax = new XMLHttpRequest();
+					ajax.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							var response = JSON.parse(this.responseText);
+							if (response.status === '200') {
+								clearInput();
+								M.toast({ html: response.message });
+								document.getElementById('prof_pic').src = "http://localhost/tifr/" + response['data'][0]['photo'];
+								delete response['data'][0]["photo"];
+								for (var i in response['data'][0]) {
+									console.log(i);
+									document.getElementById(i).value = response['data'][0][i];
+									document.getElementById(i).disabled = true;
+								}
+								document.getElementById('role').disabled = false;
+							} else {
+
+							}
+						}
+					}
+					ajax.open("POST", "include/search.php", true);
+					ajax.send(formData);
+				});
+
+				ccode.addEventListener('keyup', function () {
+					var formData = new FormData();
+					formData.append("data", ccode.value);
+					var ajax = new XMLHttpRequest();
+					ajax.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							var response = JSON.parse(this.responseText);
+							if (response.status === '200') {
+								clearInput();
+								M.toast({ html: response.message });
+								document.getElementById('prof_pic').src = "http://localhost/tifr/" + response['data'][0]['photo'];
+								delete response['data'][0]["photo"];
+								for (var i in response['data'][0]) {
+									console.log(i);
+									document.getElementById(i).value = response['data'][0][i];
+									document.getElementById(i).disabled = true;
+								}
+								document.getElementById('role').disabled = false;
+							} else {
+
+							}
+						}
+					}
+					ajax.open("POST", "include/search.php", true);
+					ajax.send(formData);
+				});
+
+				phone.addEventListener('keyup', function () {
+					var formData = new FormData();
+					formData.append("data", phone.value);
+					var ajax = new XMLHttpRequest();
+					ajax.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							var response = JSON.parse(this.responseText);
+							if (response.status === '200') {
+								M.toast({ html: response.message });
+								clearInput();
+								document.getElementById('prof_pic').src = "http://localhost/tifr/" + response['data'][0]['photo'];
+								delete response['data'][0]["photo"];
+								for (var i in response['data'][0]) {
+									console.log(i);
+									document.getElementById(i).value = response['data'][0][i];
+									document.getElementById(i).disabled = true;
+								}
+								document.getElementById('role').disabled = false;
+							} else {
+
+							}
+						}
+					}
+					ajax.open("POST", "include/search.php", true);
+					ajax.send(formData);
+				});
+
+				document.getElementById('submit').addEventListener('click', function () {
+					var formData = new FormData();
+					formData.append('ccode', document.getElementById('ccode').value);
+					formData.append('role', document.getElementById('role').value);
+					var ajax = new XMLHttpRequest();
+					ajax.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							var response = JSON.parse(this.responseText);
+							if (response.status === '200') {
+								M.toast({ html: response.message });
+								clearInput();
+							} else {
+								M.toast({ html: response.message });
+							}
+						}
+					}
+					ajax.open("POST", "include/update.php", true);
+					ajax.send(formData);
+				})
+			});
+
+			function clearInput() {
+				// document.querySelector('form').reset();
+				var inputs = document.querySelectorAll('input');
+				for (var i in inputs) {
+					inputs[i].value = "";
+				}
+			}
+
+			function getCookie(cname) {
+				var name = cname + "=";
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return "";
+			}
+		</script>
+</body>
+
+</html>

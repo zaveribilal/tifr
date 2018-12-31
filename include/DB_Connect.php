@@ -4,7 +4,7 @@ class DB_Connect{
     function connect(){
         $servername = "localhost";
         $user = "root";
-        $pass = "";
+        $pass = "root";
         $db_name = "nms";
         
         $this->conn = new mysqli($servername, $user, $pass, $db_name);
