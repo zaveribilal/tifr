@@ -35,7 +35,9 @@
     $designation = $_POST['designation'];
     $role = $_POST['role'];
     $dob = $_POST['dob'];
+    $dob = date('Y-m-d', strtotime($dob));
     $expiry = $_POST['expiry'];
+    $expiry = date('Y-m-d', strtotime($expiry));
     $identity = $_POST['identity'];
     $project = $_POST['project'];
     $sup_email = $_POST['sup_email'];
@@ -63,7 +65,7 @@
             $file_tmp = $_FILES['prof_pic']['tmp_name'];
             $file_type = $_FILES['prof_pic']['type'];
 
-            $temp = explode(".", $_FILES["file"]["name"]);
+            $temp = explode(".", $file_name);
             $newfilename = $ccode . "_" . round(microtime(true)) . '.' . end($temp);
             move_uploaded_file($file_tmp, $file_target."/".$newfilename);
             $db_store_path = $db_path."/".$newfilename;

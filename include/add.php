@@ -35,7 +35,9 @@
     $designation = $_POST['designation'];
     $role = $_POST['role'];
     $dob = $_POST['dob'];
+    $dob = date('Y-m-d', strtotime($dob));
     $expiry = $_POST['expiry'];
+    $expiry = date('Y-m-d', strtotime($expiry));
     $identity = $_POST['identity'];
     $project = $_POST['project'];
     $sup_email = $_POST['sup_email'];
