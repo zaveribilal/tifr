@@ -25,7 +25,6 @@
             if (count($user) > 0) {
                 $encrypt_pass = md5($password);
                 if($user['password'] == $encrypt_pass){
-
                     // Logging User
                     $action = "LOGIN";
                     $status = "Success";
@@ -39,6 +38,11 @@
                     $response['status'] = '200';
                     $response['message'] = 'Login Success';
                     $response['session_id'] = session_id();
+                    ob_clean();
+                    echo json_encode($response);
+                }else{
+                    $response['status'] = '400';
+                    $response['message'] = "Password doesn't match";
                     ob_clean();
                     echo json_encode($response);
                 }
@@ -62,7 +66,4 @@
         $response['message'] = "Invalid Input";
         echo json_encode($response);
     }
-
-    
-
 ?>

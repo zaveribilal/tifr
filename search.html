@@ -28,7 +28,7 @@
         ::-webkit-file-upload-button {
             text-decoration: none;
             color: #fff;
-            background-color: #26a69a;
+            background-color: #03a9f4 !important;
             text-align: center;
             letter-spacing: .5px;
             -webkit-transition: background-color .2s ease-out;
@@ -54,11 +54,15 @@
 		<div class="nav-wrapper container">
 			<a href="#" class="brand-logo"><img class="logo" src="images/logo.png" /></a>
 			<ul id="nav-mobile" class="right hide-on-med-and-down">
-				<li><a class="grey-text text-darken-4" href="new.html">New Employee</a></li>
+				<li><a class="grey-text text-darken-4" href="new.html">Add Employee</a></li>
+				<li><a class="grey-text text-darken-4" href="update.html">Update Employee</a></li>
 				<li><a class="grey-text text-darken-4" href="phone.html">Assign Phone</a></li>
 			</ul>
 		</div>
 	</nav>
+	<div class="container">
+		<h2>Search Employee</h2>
+	</div>
 	<div class="section container row valign-wrapper center">
 		<div class="col l10 offset-l1 m12 s12">
 			<div class="input-field col l12">
@@ -143,7 +147,7 @@
 							if (response.status === '200') {
 								clearInput();
 								M.toast({ html: response.message });
-								document.getElementById('prof_pic').src = "http://localhost/tifr/" + response['data'][0]['photo'];
+								document.getElementById('prof_pic').src = response['data'][0]['photo'];
 								delete response['data'][0]["photo"];
 								for (var i in response['data'][0]) {
 									console.log(i);
@@ -170,7 +174,7 @@
 							if (response.status === '200') {
 								clearInput();
 								M.toast({ html: response.message });
-								document.getElementById('prof_pic').src = "http://localhost/tifr/" + response['data'][0]['photo'];
+								document.getElementById('prof_pic').src = response['data'][0]['photo'];
 								delete response['data'][0]["photo"];
 								for (var i in response['data'][0]) {
 									console.log(i);
@@ -197,7 +201,7 @@
 							if (response.status === '200') {
 								M.toast({ html: response.message });
 								clearInput();
-								document.getElementById('prof_pic').src = "http://localhost/tifr/" + response['data'][0]['photo'];
+								document.getElementById('prof_pic').src = response['data'][0]['photo'];
 								delete response['data'][0]["photo"];
 								for (var i in response['data'][0]) {
 									console.log(i);
@@ -230,7 +234,7 @@
 							}
 						}
 					}
-					ajax.open("POST", "include/update.php", true);
+					ajax.open("POST", "include/role_update.php", true);
 					ajax.send(formData);
 				})
 			});

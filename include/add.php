@@ -63,7 +63,7 @@
             $file_tmp = $_FILES['prof_pic']['tmp_name'];
             $file_type = $_FILES['prof_pic']['type'];
 
-            $temp = explode(".", $_FILES["file"]["name"]);
+            $temp = explode(".", $file_name);
             $newfilename = $ccode . "_" . round(microtime(true)) . '.' . end($temp);
             move_uploaded_file($file_tmp, $file_target."/".$newfilename);
             $db_store_path = $db_path."/".$newfilename;
@@ -73,9 +73,9 @@
         } 
         else {
             $photo = $db_store_path;
-            $sql = "UPDATE `people1` SET `surname`='$surname',`restname`='$restname',`dept`='$dept',`room_no`='$room_no',`office`='$office',`residence`='$residence',`email`='$email',`off_1`='$off_1',`mobile`='$mobile',`ccode`='$ccode',`fax`='$fax',`off_res_ext`='$off_res_ext',`off_2`='$off_2',`off_mob`='$off_mob',`designation`='$designation',`role`='$role',`dob`='$dob',`expiry`='$expiry',`identity`='$identity',`project`='$project',`sup_email`='$sup_email',`homepage`='$homepage',`street`='$street',`city`='$city',`pincode`='$pincode',`keyphrase_1`='$keyphrase_1',`keyphrase_2`='$keyphrase_2',`keyphrase_3`='$keyphrase_3',`telid`='$telid',`photo_disp`='$photo_disp',`photo`='$photo',`design_code`='$design_code',`metadata`='$metadata',`pvt_email`='$pvt_email',`mh_id`='$mh_id',`role_email`='$role_email',`title`='$title',`gender`='$gender',`extended_expiry`='$extended_expiry' WHERE `ccode` = '$ccode'";
+            $sql = "INSERT INTO `people1`(`surname`, `restname`, `dept`, `room_no`, `office`, `residence`, `email`, `off_1`, `mobile`, `ccode`, `fax`, `off_res_ext`, `off_2`, `off_mob`, `designation`, `role`, `dob`, `expiry`, `identity`, `project`, `sup_email`, `homepage`, `street`, `city`, `pincode`, `keyphrase_1`, `keyphrase_2`, `keyphrase_3`, `telid`, `photo_disp`, `photo`, `design_code`, `metadata`, `pvt_email`, `mh_id`, `role_email`, `title`, `gender`, `extended_expiry`) VALUES ('$surname', '$restname', '$dept', '$room_no', '$office', '$residence', '$email', '$off_1', '$mobile', '$ccode', '$fax', '$off_res_ext', '$off_2', '$off_mob', '$designation', '$role', '$dob', '$expiry', '$identity', '$project', '$sup_email', '$homepage', '$street', '$city', '$pincode', '$keyphrase_1', '$keyphrase_2', '$keyphrase_3', '$telid', '$photo_disp', '$photo', '$design_code', '$metadata', '$pvt_email', '$mh_id', '$role_email','$title', '$gender','$extended_expiry')";
             if (mysqli_query($db, $sql)) {
-                header('Location: ../update.html?status=Success');
+                header('Location: ../new.html?status=Success');
             } else {
                 header('Location: ../update.html?status=Failed&error='.mysqli_error($db));
             }

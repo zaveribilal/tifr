@@ -54,7 +54,7 @@
         <div class="nav-wrapper container">
             <a href="#" class="brand-logo"><img class="logo" src="images/logo.png" /></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class="grey-text text-darken-4" href="update.html">Update Employee</a></li>
+                <li><a class="grey-text text-darken-4" href="new.html">Add Employee</a></li>\
                 <li><a class="grey-text text-darken-4" href="search.html">Search Employee</a></li>
                 <li><a class="grey-text text-darken-4" href="phone.html">Assign Phone</a></li>
             </ul>
@@ -62,8 +62,17 @@
     </nav>
     <div class="container">
         <div class="row">
-            <h2>Add New Employee</h2>
-            <form id="new_form" action="include/add.php" method="POST" enctype="multipart/form-data">
+            <h2>Update Employee Detail</h2>
+            <div class="row ">
+                <div class="col l12 m12 s12 ">
+                    <div class="input-field">
+                        <label for="Name">Search</label>
+                        <input placeholder="Enter the ccode" id="s_ccode" type="text">
+                        <button id="ccode_search" class="waves-effect waves-light btn light-blue">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <form action="include/update.php" method="POST" enctype="multipart/form-data">
                 <div class="img-holder col l12 m12 s12 center">
                     <p id="chooser_ph">Choose a picture <span class="mandatory">*</span></p>
                     <div class="row">
@@ -227,14 +236,13 @@
                         <input id="extended_expiry" type="text" name="extended_expiry" placeholder="Extended Expiry">
                     </div>
                 </div>
-                <input class="btn light-blue" type="submit" name="add" value="ADD EMPLOYEE">
+                <input class="btn light-blue" type="submit" name="add" value="UPDATE EMPLOYEE">
             </form>
         </div>
     </div>
 
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.js"></script>
     <script type="text/javascript" src="./js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -245,14 +253,37 @@
             var url = new URL(window.location.href);
             var status = url.searchParams.get("status");
 
-            if(status === 'Success'){
-                M.toast({html: "Employee Added!"});
-            }else if (status === 'Failed'){
-                M.toast({html: "Failed to add Employee!"});
+            if (status === 'Success') {
+                M.toast({ html: "Employee Updated!" });
+            } else if (status === 'Failed') {
+                M.toast({ html: "Failed to update Employee!" });
             }
 
             var elems = document.querySelectorAll('.datepicker');
             var instances = M.Datepicker.init(elems, {});
+
+            var search_btn = document.getElementById('ccode_search');
+            var ccode = document.getElementById('s_ccode')
+            search_btn.addEventListener('click', function () {
+                var formData = new FormData();
+                formData.append("ccode", ccode.value);
+                var ajax = new XMLHttpRequest();
+                ajax.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log(this.responseText);
+                        var response = JSON.parse(this.responseText);
+                        console.log(response.data);
+                        document.getElementById('prof_pic').src = response.data['photo'];
+                        delete response.data["photo"];
+                        for (var i in response.data) {
+                            console.log(i);
+                            document.getElementById(i).value = response.data[i];
+                        }
+                    }
+                }
+                ajax.open("POST", "include/search_update.php", true);
+                ajax.send(formData);
+            });
 
             function handleFileSelect(evt) {
                 if (evt.target.files != null) {
@@ -265,8 +296,6 @@
                         return function (e) {
                             document.getElementById('prof_pic').src = e.target.result;
                             document.getElementById('prof_pic').style.boxShadow = "0 2px 2px 0 rgba(0,0,0,0.2)";
-                            // document.getElementById('prof_pic').style.width = "100px";
-                            // document.getElementById('prof_pic').style.height = "200px";
                         };
                     })(f);
                     reader.readAsDataURL(f);
@@ -274,10 +303,6 @@
             }
             document.getElementById('chooser').addEventListener('change', handleFileSelect);
         });
-
-        function validate(){
-            // $("#new_form").validate();
-        }
 
         function getCookie(cname) {
             var name = cname + "=";
